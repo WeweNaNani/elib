@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 40px;
+            text-align: center;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            display: inline-block;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h2>Buy Book</h2>
+    <p>To download this book, please complete payment using MPesa.</p>
+
+    <form action="{{ url_for('buy', olid=olid) }}" method="post">
+        <label for="phone_number">Enter your MPesa phone number:</label><br>
+        <input type="text" id="phone_number" name="phone_number" required placeholder="e.g., 254712345678"><br>
+        <button type="submit">Pay with MPesa</button>
+    </form>
+
+    <a href="{{ url_for('index') }}">Back to Search</a>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+instance/
+.env
+
+# SQLite DB
+books.db
+
+# Flask secret
+*.pem
+*.key
+
+# VSCode or editor junk
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db

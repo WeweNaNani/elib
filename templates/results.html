@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h2>Results for "{{ query }}"</h2>
+    <ul>
+        {% for book in books %}
+        <li>
+            <strong>{{ book.title }}</strong> by {{ book.author }}<br>
+            
+            <!-- Check if cover image exists and display it -->
+            {% if book.cover_url %}
+                <img src="{{ book.cover_url }}" alt="Cover Image" style="max-width: 100px; max-height: 150px; margin-bottom: 10px;">
+            {% else %}
+                <p>No cover image available.</p>
+            {% endif %}
+            
+            {% if book.download_url %}
+                <a href="{{ book.download_url }}" target="_blank">Download</a>
+            {% else %}
+                Not available for download. 
+                {% if book.ia %}
+                    You can borrow it <a href="{{ 'https://archive.org/details/' + book.ia }}" target="_blank">here</a>.
+                {% else %}
+                    No borrow link available.
+                {% endif %}
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="/">Search again</a>
+</body>
+</html>

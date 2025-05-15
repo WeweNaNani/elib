@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library</title>
+    <style>
+        .book {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+        img {
+            max-height: 200px;
+        }
+        .buy-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .buy-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    {% if session.get('user') %}
+        <p>Welcome, {{ session['user']['name'] }}!</p>
+        <a href="{{ url_for('logout') }}"></a>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard') }}" class="btn">📊 Go to Dashboard</a>
+
+    <h1>Search for Books</h1>
+    <form method="POST">
+        <input type="text" name="query" placeholder="Enter a book title or author..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if not book %}
+	<h2></h2>
+	<div id="book-feed" style="display: flex; flex-wrap: wrap; gap: 16px;"></div>
+    {% endif %}
+	
+
+    {% if books %}
+        <h2>Results:</h2>
+        {% for book in books %}
+            <div class="book">
+                <h3>{{ book.title }}</h3>
+                <p><strong>Author:</strong> {{ book.author }}</p>
+
+                {% if book.cover_id %}
+                    <img src="https://covers.openlibrary.org/b/id/{{ book.cover_id }}-M.jpg" alt="Cover">
+                {% endif %}
+
+                {% if book.preview %}
+                    <p><strong>Preview:</strong> {{ book.preview }}</p>
+                {% endif %}
+
+                {% if book.downloadable_files %}
+                    <h4>Download Links:</h4>
+                    <ul>
+                        {% for file in book.downloadable_files %}
+                            <li><a href="{{ file.url }}" target="_blank">{{ file.format | upper }} Download</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No downloads available. Preview only.</p>
+                {% endif %}
+
+                {% if book.preview_link %}
+                    <h4>Preview the Book:</h4>
+                    <a href="{{ book.preview_link }}" target="_blank">Click here to preview the book</a>
+                {% endif %}
+
+                {% if book.olid %}
+                    <form action="{{ url_for('buy', olid=book.olid) }}" method="POST">
+                        <label for="phone_number">Phone Number (MPesa):</label>
+                        <input type="text" name="phone_number" placeholder="Enter your phone number" required>
+                        <button class="buy-button" type="submit">Buy for KES 50</button>
+                    </form>
+                {% else %}
+                    <p>No purchase link available for this book.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+
+{% if not book %}
+<script>
+fetch('/api/random_feed')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('book-feed');
+    data.forEach(book => {
+      const card = document.createElement('div');
+      card.style.border = '1px solid #ccc';
+      card.style.borderRadius = '8px';
+      card.style.padding = '10px';
+      card.style.width = '160px';
+      card.innerHTML = `
+        <img src="${book.cover}" alt="${book.title}" style="width: 100%; border-radius: 4px;">
+        <h4>${book.title}</h4>
+        <p style="font-size: 0.9em;">${book.author}</p>
+        <a href="/buy/${book.olid}" class="btn">Buy</a>
+      `;
+      container.appendChild(card);
+    });
+  })
+  .catch(err => console.error("Failed to load feed", err));
+</script>
+{% endif %}
+
+
+</html>

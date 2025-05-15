@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 10px;
+      background: #f7f7f7;
+      color: #333;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+    header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #0078D4;
+    }
+    h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+    h2 {
+      margin-top: 40px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background: #0078D4;
+      color: white;
+    }
+    .admin-section {
+      background: #e7f1ff;
+      padding: 15px;
+      margin-top: 30px;
+      border-radius: 5px;
+    }
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #0078D4;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="{{ user.picture }}" alt="Profile Picture" />
+  <div>
+    <h1>Welcome, {{ user.name }}</h1>
+    <p>{{ user.email }}</p>
+    <p><a href="{{ url_for('logout') }}">Logout</a> | <a href="{{ url_for('index') }}">Search Books</a></p>
+  </div>
+</header>
+
+<h2>Recent Searches</h2>
+{% if searches %}
+<table>
+  <tr><th>Query</th><th>When</th></tr>
+  {% for search in searches %}
+  <tr>
+    <td>{{ search['query'] }}</td>
+    <td>{{ search['timestamp'] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No recent searches.</p>
+{% endif %}
+
+<h2>Downloaded Books</h2>
+{% if downloads %}
+<table>
+  <tr><th>Title</th><th>OLID</th><th>When</th></tr>
+  {% for d in downloads %}
+  <tr>
+    <td>{{ d['title'] }}</td>
+    <td>{{ d['olid'] }}</td>
+    <td>{{ d['timestamp'] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No downloaded books yet.</p>
+{% endif %}
+
+<h2>Purchases</h2>
+{% if purchases %}
+<table>
+  <tr><th>Title</th><th>Amount (KES)</th><th>Status</th><th>When</th></tr>
+  {% for p in purchases %}
+  <tr>
+    <td>{{ p['title'] }}</td>
+    <td>{{ "%.2f"|format(p['amount']) }}</td>
+    <td>{{ p['status'] }}</td>
+    <td>{{ p['transaction_time'] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No purchases made yet.</p>
+{% endif %}
+
+<h2>Wishlist / Favorites</h2>
+{% if wishlist %}
+<table>
+  <tr><th>Title</th><th>OLID</th><th>Added On</th></tr>
+  {% for w in wishlist %}
+  <tr>
+    <td>{{ w['title'] }}</td>
+    <td>{{ w['olid'] }}</td>
+    <td>{{ w['timestamp'] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>Your wishlist is empty.</p>
+{% endif %}
+
+{% if is_admin %}
+<div class="admin-section">
+  <h2>Admin Tools & Stats</h2>
+  <p><strong>Total Users:</strong> {{ admin_stats.total_users }}</p>
+  <p><strong>Total Searches:</strong> {{ admin_stats.total_searches }}</p>
+  <p><strong>Total Books in DB:</strong> {{ admin_stats.total_books }}</p>
+  <p><a href="{{ url_for('admin_approve_books') }}">Approve New Books</a> <!-- Example link --></p>
+</div>
+{% endif %}
+
+</body>
+</html>

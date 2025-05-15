@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ book.title }} - Details</title>
+</head>
+<body>
+    <h2>{{ book.title }} by {{ book.author }}</h2>
+    <p><strong>Publish Year:</strong> {{ book.publish_year }}</p>
+    <p><strong>Language:</strong> {{ book.language }}</p>
+    <p><strong>Genres:</strong> {{ book.genres }}</p>
+    <p><strong>Preview:</strong> {{ book.preview }}</p>
+
+    {% if book.cover_id %}
+        <img src="https://covers.openlibrary.org/b/id/{{ book.cover_id }}-L.jpg" alt="{{ book.title }} cover"><br>
+    {% endif %}
+
+    <a href="/">Go back to search results</a>
+</body>
+</html>

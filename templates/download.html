@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Book</title>
+</head>
+<body>
+    <h1>Download: {{ book.title }}</h1>
+    <p><strong>Author:</strong> {{ book.author }}</p>
+
+    {% if book.downloadable_files %}
+        <h3>Available Formats:</h3>
+        <ul>
+            {% for file in book.downloadable_files %}
+                <li>
+                    <a href="{{ file.url }}" target="_blank">{{ file.format | upper }} Download</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No downloadable files available for this book.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('index') }}">← Back to Search</a>
+</body>
+</html>

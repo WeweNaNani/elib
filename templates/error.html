@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Failed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffebee;
+            color: #c62828;
+            text-align: center;
+            padding: 50px;
+        }
+        .card {
+            background: #fff;
+            padding: 30px;
+            display: inline-block;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #c62828;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>❌ Payment Failed</h2>
+        <p>There was a problem processing your payment via MPesa.</p>
+        <p><strong>Please try again later.</strong></p>
+        <a href="{{ url_for('index') }}">Back to Search</a>
+    </div>
+</body>
+</html>
